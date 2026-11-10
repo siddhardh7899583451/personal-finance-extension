@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Finance Intelligence</title>
+  <link rel="stylesheet" href="./popup.css" />
+</head>
+<body>
+  <div class="app" id="app">
+    <header class="header">
+      <div class="brand">
+        <span class="logo">₹</span>
+        <div>
+          <h1>Finance</h1>
+          <p class="subtitle">Quick entry</p>
+        </div>
+      </div>
+      <button type="button" class="btn-icon" id="btnTheme" title="Toggle theme" aria-label="Toggle theme">◐</button>
+    </header>
+
+    <section class="summary card" id="summaryCard">
+      <div class="stat">
+        <span class="label">This month spent</span>
+        <span class="value" id="monthSpent">—</span>
+      </div>
+      <div class="stat">
+        <span class="label">Income</span>
+        <span class="value income" id="monthIncome">—</span>
+      </div>
+      <div class="stat">
+        <span class="label">Net</span>
+        <span class="value" id="monthNet">—</span>
+      </div>
+    </section>
+
+    <section class="quick-add card">
+      <div class="tabs">
+        <button type="button" class="tab active" data-type="expense">Expense</button>
+        <button type="button" class="tab" data-type="income">Income</button>
+      </div>
+      <form id="quickForm" novalidate>
+        <input type="text" id="title" placeholder="Title" required maxlength="200" autocomplete="off" />
+        <div class="row">
+          <input type="number" id="amount" placeholder="Amount" min="0.01" step="0.01" required />
+          <select id="category" required></select>
+        </div>
+        <div class="row">
+          <input type="date" id="date" required />
+          <select id="paymentMethod">
+            <option value="">Payment</option>
+            <option value="upi">UPI</option>
+            <option value="card">Card</option>
+            <option value="cash">Cash</option>
+            <option value="netbanking">Net Banking</option>
+            <option value="wallet">Wallet</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+        <button type="submit" class="btn primary" id="submitBtn">Add Expense</button>
+      </form>
+      <p class="msg" id="formMsg" role="status" aria-live="polite"></p>
+    </section>
+
+    <section class="recent card">
+      <h2>Recent</h2>
+      <ul id="recentList" class="txn-list"></ul>
+      <p class="empty" id="recentEmpty">No transactions yet</p>
+    </section>
+
+    <footer class="footer">
+      <button type="button" class="btn secondary full" id="btnDashboard">Open Dashboard</button>
+    </footer>
+  </div>
+  <script type="module" src="./popup.ts"></script>
+</body>
+</html>

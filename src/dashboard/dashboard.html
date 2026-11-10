@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Finance Intelligence – Dashboard</title>
+  <link rel="stylesheet" href="./dashboard.css" />
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="brand">
+        <span class="logo">₹</span>
+        <span>Finance Intelligence</span>
+      </div>
+      <nav>
+        <button class="nav-item active" data-view="overview">Overview</button>
+        <button class="nav-item" data-view="transactions">Transactions</button>
+        <button class="nav-item" data-view="budgets">Budgets</button>
+        <button class="nav-item" data-view="goals">Savings Goals</button>
+        <button class="nav-item" data-view="insights">Insights</button>
+        <button class="nav-item" data-view="reports">Reports</button>
+        <button class="nav-item" data-view="settings">Settings</button>
+      </nav>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <h1 id="viewTitle">Overview</h1>
+        <div class="topbar-actions">
+          <select id="periodSelect">
+            <option value="this-month">This month</option>
+            <option value="last-month">Last month</option>
+            <option value="this-year">This year</option>
+            <option value="all">All time</option>
+          </select>
+          <button type="button" class="btn" id="btnTheme">Theme</button>
+        </div>
+      </header>
+
+      <!-- Overview -->
+      <section id="view-overview" class="view active">
+        <div class="kpi-grid" id="kpiGrid">
+          <div class="kpi"><span class="label">Expenses</span><span class="val" id="kpiExpenses">—</span></div>
+          <div class="kpi"><span class="label">Income</span><span class="val" id="kpiIncome">—</span></div>
+          <div class="kpi"><span class="label">Net cash flow</span><span class="val" id="kpiNet">—</span></div>
+          <div class="kpi"><span class="label">Savings rate</span><span class="val" id="kpiSavings">—</span></div>
+          <div class="kpi"><span class="label">Avg daily spend</span><span class="val" id="kpiDaily">—</span></div>
+          <div class="kpi"><span class="label">Transactions</span><span class="val" id="kpiCount">—</span></div>
+        </div>
+        <div class="charts-row">
+          <div class="card chart-card">
+            <h3>Category distribution</h3>
+            <canvas id="chartCategory" height="220"></canvas>
+          </div>
+          <div class="card chart-card">
+            <h3>Spending trend (by day)</h3>
+            <canvas id="chartTrend" height="220"></canvas>
+          </div>
+        </div>
+        <div class="card">
+          <h3>Insights</h3>
+          <ul id="insightList" class="insight-list"></ul>
+        </div>
+      </section>
+
+      <!-- Transactions -->
+      <section id="view-transactions" class="view">
+        <div class="toolbar">
+          <input type="search" id="searchTxn" placeholder="Search title, merchant, tags…" />
+          <select id="filterType">
+            <option value="">All types</option>
+            <option value="expense">Expense</option>
+            <option value="income">Income</option>
+          </select>
+          <button class="btn primary" id="btnAddTxn">+ Add</button>
+        </div>
+        <div class="card table-wrap">
+          <table class="data-table" id="txnTable">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Title</th>
+                <th>Category</th>
+                <th>Type</th>
+                <th>Amount</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Budgets -->
+      <section id="view-budgets" class="view">
+        <div class="toolbar">
+          <button class="btn primary" id="btnAddBudget">+ New budget</button>
+        </div>
+        <div id="budgetList" class="card-grid"></div>
+      </section>
+
+      <!-- Goals -->
+      <section id="view-goals" class="view">
+        <div class="toolbar">
+          <button class="btn primary" id="btnAddGoal">+ New goal</button>
+        </div>
+        <div id="goalList" class="card-grid"></div>
+      </section>
+
+      <!-- Insights -->
+      <section id="view-insights" class="view">
+        <div class="card">
+          <h3>Anomalies & patterns</h3>
+          <p class="hint">Statistical signals only — not fraud labels.</p>
+          <ul id="anomalyList" class="insight-list"></ul>
+        </div>
+        <div class="card">
+          <h3>Financial insights</h3>
+          <ul id="insightListFull" class="insight-list"></ul>
+        </div>
+      </section>
+
+      <!-- Reports -->
+      <section id="view-reports" class="view">
+        <div class="card">
+          <h3>Export data</h3>
+          <p class="hint">All data stays on your device. Exports are generated locally.</p>
+          <div class="btn-row">
+            <button class="btn" id="btnExportJson">Export JSON</button>
+            <button class="btn" id="btnExportCsv">Export CSV</button>
+          </div>
+        </div>
+        <div class="card">
+          <h3>Import data</h3>
+          <input type="file" id="importFile" accept=".json,.csv" />
+          <p class="hint">JSON full snapshot or CSV of transactions. Preview & validate before applying.</p>
+          <pre id="importPreview" class="preview"></pre>
+          <button class="btn primary" id="btnImportApply" disabled>Apply import</button>
+        </div>
+      </section>
+
+      <!-- Settings -->
+      <section id="view-settings" class="view">
+        <div class="card form-card">
+          <label>Default currency
+            <select id="settingCurrency">
+              <option value="INR">INR (₹)</option>
+              <option value="USD">USD ($)</option>
+              <option value="EUR">EUR (€)</option>
+              <option value="GBP">GBP (£)</option>
+            </select>
+          </label>
+          <label>Theme
+            <select id="settingTheme">
+              <option value="system">System</option>
+              <option value="dark">Dark</option>
+              <option value="light">Light</option>
+            </select>
+          </label>
+          <label>Anomaly sensitivity
+            <select id="settingAnomaly">
+              <option value="low">Low</option>
+              <option value="medium">Medium</option>
+              <option value="high">High</option>
+            </select>
+          </label>
+          <button class="btn primary" id="btnSaveSettings">Save settings</button>
+        </div>
+        <div class="card">
+          <h3>Privacy</h3>
+          <p>This extension is local-first. No account, no backend, no ads. Financial data never leaves your browser unless you explicitly export it.</p>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Simple modal for add forms -->
+  <dialog id="modal">
+    <form method="dialog" id="modalForm" class="modal-form">
+      <h2 id="modalTitle">Add</h2>
+      <div id="modalBody"></div>
+      <div class="btn-row">
+        <button type="submit" class="btn primary" value="ok">Save</button>
+        <button type="button" class="btn" id="modalCancel">Cancel</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script type="module" src="./dashboard.ts"></script>
+</body>
+</html>
