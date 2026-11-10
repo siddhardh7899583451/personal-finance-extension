@@ -6,3 +6,31 @@ dist/
 .vscode/
 coverage/
 *.local
+
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+
+# Caches
+.vite/
+.cache/
+
+# Environment and secrets
+.env
+.env.*
+!.env.example
+
+# Logs
+*.log
+npm-debug.log*
+
+# Operating system
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
